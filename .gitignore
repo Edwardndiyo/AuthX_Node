@@ -1,0 +1,12 @@
+# Ignore .env file to protect sensitive information
+.env
+
+# Node modules folder
+node_modules/
+
+# Logs
+*.log
+
+# Optional: Ignore system-specific files
+.DS_Store
+Thumbs.db
