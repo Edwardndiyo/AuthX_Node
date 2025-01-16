@@ -1,10 +1,10 @@
-const { register, login} = require('./src/authx'); // Import the required functions
-const { registerUser, loginUser, verifyToken } = require('./src/tokenUtils');
+const { register, login} = require('./src/authx');
+const { verifyToken } = require('./src/tokenUtils');
 
 
 // Register a user
-console.log(register('john_doe', 'password123')); // Registering a user
-console.log(register('john_doe', 'password123')); // Attempting to register again (should handle this gracefully)
+console.log(register('john_doe', 'password123')); 
+console.log(register('john_doe', 'password123')); 
 
 // Login and get a token
 const token = login('john_doe', 'password123'); // Logging in with the correct password

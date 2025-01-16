@@ -1,70 +1,80 @@
-// const bcrypt = require('bcryptjs');
-// const jwt = require('jsonwebtoken');
-// const crypto = require('crypto');
+// const { registerUser, loginUser } = require('./tokenUtils');
+// const { assignRole } = require('./roles');
 
-// // Simulating a database (for the sake of this example)
-// let users = [];
-
-// const SECRET_KEY = 'your-secret-key'; // Replace with a strong, secure key in production
-
-// // Register a new user
-// function registerUser(username, password) {
-//   // Hash the password before storing it
-//   const hashedPassword = bcrypt.hashSync(password, 10);
-  
-//   const user = { username, password: hashedPassword };
-//   users.push(user); // In a real app, you'd save this to a database
-
-//   return 'User registered successfully';
+// function register(username, password) {
+//     try {
+//         const user = registerUser(username, password);
+//         assignRole(username, 'user');
+//         return user;
+//     } catch (error) {
+//         throw new Error(`Registration failed: ${error.message}`);
+//     }
 // }
 
-// // Login a user and issue a token
-// function loginUser(username, password) {
-//   const user = users.find((u) => u.username === username);
-  
-//   if (!user) {
-//     return 'User not found';
-//   }
-  
-//   // Compare the password with the hashed password in the database
-//   const isPasswordCorrect = bcrypt.compareSync(password, user.password);
-  
-//   if (!isPasswordCorrect) {
-//     return 'Invalid credentials';
-//   }
-  
-//   // Generate a JWT-like token
-//   const token = jwt.sign({ username: user.username }, SECRET_KEY, { expiresIn: '1h' });
-  
-//   return token;
+
+// function login(username, password) {
+//     try {
+//         const token = loginUser(username, password);
+//         return token;
+//     } catch (error) {
+//         throw new Error(`Login failed: ${error.message}`);
+//     }
 // }
 
-// // Example function to verify JWT token (for later use in protecting routes)
-// function verifyToken(token) {
-//   try {
-//     const decoded = jwt.verify(token, SECRET_KEY);
-//     return decoded;
-//   } catch (error) {
-//     return 'Invalid or expired token';
-//   }
-// }
-
-// // Export functions to be used in other files
-// module.exports = { registerUser, loginUser, verifyToken };
+// module.exports = { register, login };
 
 
 
-const { registerUser, loginUser } = require('./tokenUtils');
-const { assignRole } = require('./roles');
 
-function register(username, password) {
-    const user = registerUser(username, password); // Handle registration
-    return user;
+
+
+
+
+
+
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
+const EXPIRATION_TIME = '1h'; // Token expiration time
+
+// Register User: Hash password and return processed data
+async function register(username, password) {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const userData = { username, password: hashedPassword };
+    return userData; // User handles database insertion
 }
 
-function login(username, password) {
-    const token = loginUser(username, password); // Handle login and JWT token creation
-    return token;
+// Login User: Verify user-provided password and generate JWT
+async function login(userFromDb, inputPassword) {
+    if (!userFromDb) throw new Error('User not found'); // Ensure user exists
+    const isPasswordValid = await bcrypt.compare(inputPassword, userFromDb.password);
+    if (!isPasswordValid) throw new Error('Invalid password');
+
+    // Generate JWT token
+    const token = jwt.sign({ username: userFromDb.username }, SECRET_KEY, { expiresIn: EXPIRATION_TIME });
+    return { token, username: userFromDb.username }; // Return token and user data
 }
 
-module.exports = { register, login };
+// Refresh JWT: Generate a new token based on an existing one
+function refreshToken(oldToken) {
+    try {
+        const decoded = jwt.verify(oldToken, SECRET_KEY);
+        const newToken = jwt.sign({ username: decoded.username }, SECRET_KEY, { expiresIn: EXPIRATION_TIME });
+        return newToken;
+    } catch (error) {
+        throw new Error('Invalid or expired token. Please log in again.');
+    }
+}
+
+// Verify Token: Ensure the JWT is valid
+function verifyToken(token) {
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        return decoded; // Return decoded payload
+    } catch (error) {
+        throw new Error('Invalid token');
+    }
+}
+
+module.exports = { register, login, refreshToken, verifyToken };
