@@ -1,6 +1,6 @@
 {
   "name": "ndiyo-auth-x",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An authentication package with JWT and Redis support",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "author": "Edward Essien Ndiyo <NdiyoEdward@gmail.com> (https://github.com/EdwardNdiyo)",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^5.1.1",  
+    "bcryptjs": "^2.4.3",  
     "express": "^4.21.2",
     "ioredis": "^5.4.2",
     "jose": "^5.9.6",
