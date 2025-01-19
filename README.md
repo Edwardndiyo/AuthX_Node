@@ -11,7 +11,7 @@ A simple, open-source authentication SDK for Node.js, with support for JWT, toke
 ## Installation
 
 ```bash
-npm install authx
+npm install ndiyo-auth-x@beta 
 
 ```
 

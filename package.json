@@ -1,5 +1,5 @@
 {
-  "name": "authx",
+  "name": "ndiyo-auth-x",
   "version": "1.0.0",
   "description": "An authentication package with JWT and Redis support",
   "main": "index.js",
