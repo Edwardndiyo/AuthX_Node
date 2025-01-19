@@ -1,37 +1,98 @@
-// const { register, login} = require('./src/authx');
-// const { verifyToken } = require('./src/tokenUtils');
+// process.env.USE_MOCK_REDIS = 'true'; // Use mock Redis for testing
+// process.env.JWT_SECRET_KEY = 'mySecretKey'; // Set a test secret key
+
+// const { register, loginUser, verifyToken, refreshToken } = require('./src/tokenUtils');
+// const { revokeToken } = require('./src/redisUtils');
+
+// (async () => {
+//     try {
+//         // Register a user
+//         const user = register('john_doe', 'Password@123');
+//         console.log('Registered User:', user);
+
+//         // Login and generate a token
+//         const token = loginUser(user.username, user.password, 'user');
+//         console.log('Login Token:', token);
+
+//         // Verify the token
+//         const decoded = await verifyToken(token);
+//         console.log('Decoded Token:', decoded);
+
+//         // Revoke the token
+//         await revokeToken(decoded.jti);
+//         console.log('Token Revoked');
+
+//         // Try verifying the token again after revocation
+//         try {
+//             await verifyToken(token);
+//         } catch (error) {
+//             console.log('Verification After Revocation:', error.message);
+//         }
+//     } catch (error) {
+//         console.error(error.message);
+//     }
+// })();
 
 
-// // Register a user
-// console.log(register('john_doe', 'password123')); 
-// console.log(register('john_doe', 'password123')); 
-
-// // Login and get a token
-// const token = login('john_doe', 'password123'); // Logging in with the correct password
-// console.log('Login Token:', token);
-
-// // Verify the token
-// const decoded = verifyToken(token); // Verifying the token
-// console.log('Decoded Token:', decoded);
 
 
+// process.env.USE_MOCK_REDIS = 'true';
+// process.env.JWT_SECRET_KEY = 'mySecretKey'; // For testing only
+
+// const { register } = require('./src/authx');
+// const { loginUser, verifyToken, refreshToken } = require('./src/tokenUtils');
+// const { revokeToken } = require('./src/redisUtils');
+
+// (async () => {
+//     try {
+//         // Register a user
+//         const user = await register('john_doe', 'Password@123');
+//         console.log('Registered User:', user);
+
+//         // Login and generate a token
+//         const token = await loginUser(user.username, 'Password@123', 'user');
+//         console.log('Login Token:', token);
+
+//         // Verify the token
+//         const decoded = await verifyToken(token);
+//         console.log('Decoded Token:', decoded);
+
+//         // Revoke the token
+//         await revokeToken(decoded.jti);
+//         console.log('Token Revoked');
+
+//         // Try verifying the token again
+//         try {
+//             await verifyToken(token);
+//         } catch (error) {
+//             console.log('Verification After Revocation:', error.message);
+//         }
+
+//         // Refresh the token
+//         const newToken = await refreshToken(token);
+//         console.log('Refreshed Token:', newToken);
+//     } catch (error) {
+//         console.error(error.message);
+//     }
+// })();
 
 
-process.env.USE_MOCK_REDIS = 'true'; // Use mock Redis for testing
-process.env.JWT_SECRET_KEY = 'mySecretKey'; // Set a test secret key
+process.env.USE_MOCK_REDIS = 'true'; // Mock Redis for testing
+process.env.JWT_SECRET_KEY = 'EdwardEssienNdiyo'; // For testing only
 
-const { registerUser, loginUser, verifyToken, refreshToken } = require('./src/tokenUtils');
+const { register } = require('./src/authx'); // Assuming this has the user registration logic
+const { generateToken, verifyToken, refreshToken } = require('./src/tokenUtils');
 const { revokeToken } = require('./src/redisUtils');
 
 (async () => {
     try {
         // Register a user
-        const user = registerUser('john_doe', 'Password@123');
+        const user = await register('john_doe', 'Password@123');
         console.log('Registered User:', user);
 
-        // Login and generate a token
-        const token = loginUser(user.username, user.password, 'user');
-        console.log('Login Token:', token);
+        // Generate a token
+        const token = await generateToken({ username: user.username, role: 'user' });
+        console.log('Generated Token:', token);
 
         // Verify the token
         const decoded = await verifyToken(token);
@@ -41,13 +102,17 @@ const { revokeToken } = require('./src/redisUtils');
         await revokeToken(decoded.jti);
         console.log('Token Revoked');
 
-        // Try verifying the token again after revocation
+        // Try verifying the token again
         try {
             await verifyToken(token);
         } catch (error) {
             console.log('Verification After Revocation:', error.message);
         }
+
+        // Refresh the token
+        const newToken = await refreshToken(token);
+        console.log('Refreshed Token:', newToken);
     } catch (error) {
-        console.error(error.message);
+        console.error('Error in the process:', error.message);
     }
 })();

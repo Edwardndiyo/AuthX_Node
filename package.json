@@ -16,6 +16,7 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "ioredis-mock": "^8.9.0",
+    "jose": "^5.9.6",
     "jsonwebtoken": "^9.0.2",
     "redis": "^4.7.0",
     "web3": "^4.16.0"
