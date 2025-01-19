@@ -1,24 +1,25 @@
 {
   "name": "authx",
   "version": "1.0.0",
-  "description": "",
+  "description": "An authentication package with JWT and Redis support",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Edward Essien Ndiyo <NdiyoEdward@gmail.com> (https://github.com/EdwardNdiyo)",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.1.1",
-    "bcryptjs": "^2.4.3",
-    "crypto": "^1.0.1",
-    "dotenv": "^16.4.7",
+    "bcryptjs": "^5.1.1",  
     "express": "^4.21.2",
-    "ioredis-mock": "^8.9.0",
+    "ioredis": "^5.4.2",
     "jose": "^5.9.6",
     "jsonwebtoken": "^9.0.2",
-    "redis": "^4.7.0",
-    "web3": "^4.16.0"
+    "redis": "^4.7.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.4.7",
+    "ioredis-mock": "^8.9.0",  
+    "supertest": "^7.0.0"
   }
 }
