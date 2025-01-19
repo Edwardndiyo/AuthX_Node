@@ -13,7 +13,7 @@ A simple, open-source authentication SDK for Node.js, with support for JWT, toke
 ```bash
 npm install authx
 
-
+```
 
 
 Usage
